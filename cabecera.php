@@ -25,7 +25,7 @@
     <?php } ?>
     <div class="col col-md-3"><a href="lista_activacion_socio.php" class="font_opt_menu" id="act_socio"><img src="img/ico_actividad.png">Activación Socios</a></div>
     <div class="col"><a href="asamblea.php" class="font_opt_menu" id="asamblea"><img src="img/ico_asamblea.png">Asambleas</a></div>
-    <div class="col"><a href="#" class="font_opt_menu" id="actividades"><img src="img/ico_socios.png">Actividades</a></div>
+    <div class="col"><a href="curso.php" class="font_opt_menu" id="curso"><img src="img/ico_curso.png">Cursos</a></div>
     <div class="col"><a href="#" class="font_opt_menu" id="configuracion"><img src="img/ico_config.png">Configuración</a></div>
   </div>
   </div>

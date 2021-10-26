@@ -349,7 +349,7 @@ body {
 .css_advertencia{
   color:#f71c1c;
 }
-.tm_input_zoom{
+.tm_input_zoom, .tm_input{
   width: 50%;
 }
 .toggle-on.btn-sm {
@@ -363,7 +363,17 @@ body {
   min-width: 80px;
   display: none;
 }
-
+.radio{
+  margin-left: 4px;
+}
+.bg_green{
+  border: solid 1px #7dad88;
+  background: #f6fff8;
+}
+.bg_url{
+  border: solid 1px #adebbb;
+  background: #d9f3df;
+}
 /*funcionalidad responsiva*/
 @media screen and (max-width:1040px){
   .cerrar_sesion {
