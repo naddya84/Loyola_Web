@@ -56,18 +56,18 @@ $curso_edit = ORM::for_table('course')
               <div class="center color_datos"><h4><?=isset($curso_edit)?"Registro Curso":"Información del Curso"?></h4></div>  
               <div class="margen"></div>
               <div class="row">
-                <?php if(isset($curso_edit) && $curso_edit->photo){ ?>
-                <div class="col-4" class="contiene_foto">
-                  <img src="uploads/foto_curso/<?=$curso_edit->id."/".$curso_edit->photo?>" class="css_foto">
-                  <img src="img/ico_eliminar.png" class="btn_eliminar_foto" id="<?=$curso_edit->id?>">
-                </div>
-                <?php }?>
-                <div class="col-6">
-                  <div class="margen"></div>
-                    <div class="div_dropzone">
-                      <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
-                    </div>
-                </div>
+                
+              <?php if(isset($curso_edit) && $curso_edit->photo){ ?>
+              <div class="col-4 contiene_foto">
+                <input type="hidden" id="foto" value="<?=$curso_edit->photo?>">
+                <img src="img/ico_eliminar.png" class="cursor" id="btn_eliminar_foto">
+                <img src="uploads/foto_curso/<?=$curso_edit->id."/".$curso_edit->photo?>" class="css_foto">
+              </div>
+              <?php }?>
+                
+              <div class="col-6 div_dropzone">
+                <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
+              </div>
               </div>
               <div class="margen"></div>
               <div class="color_datos"><strong>Datos del Curso:</strong></div>
@@ -138,50 +138,57 @@ $curso_edit = ORM::for_table('course')
                         <span class="desc_zoom left">Contraseña: </span>
                         <input type="text" id="password" class="form-control color_datos tm_input" <?=(isset($curso_edit)?"value='" .$curso_edit->password. "'" : "")?>>
                       </div> 
-                   </div>
+                    </div>
                   </div>
                   <div id="lugar_curso" <?=isset($curso_edit)?($curso_edit->type == "Presencial")?'style="display: block"':'style="display: none"':'style="display: none"'?>>
                     <label>Dirección y Lugar:</label>
                     <input type="text" id="lugar" class="form-control"<?=(isset($curso_edit)?"value='" .$curso_edit->locale. "'" : "")?>>
                   </div>
+                  <br>
+                  <label class="left">Estado:</label>
+                  <select id="estado" class="form-control tm_estado">
+                    <option value="activo" <?=isset($curso_edit)?$curso_edit->status=="activo"?"selected":"":""?>>Activo</option>
+                    <option value="inactivo" <?=isset($curso_edit)?$curso_edit->status=="inactivo"?"selected":"":""?>>Inactivo</option>
+                  </select>
+                </div>
+              </div>        
+              <div class="margen"></div>
+              <div class="center">
+                <div class="btns">
+                  <?php if(isset($curso_edit)){ ?>
+                  <button id="btn_actualizar" class="btn btn-success btns_tamano">Actualizar</button>
+                  <button id="btn_Eliminar" class="btn btn-success btns_tamano">Eliminar</button>
+                  <?php } else { ?>
+                  <div id="btn_guardar" class="btn btn-success btn_volver">Guardar</div>
+                  <?php } ?>
+                  <a href="curso.php"><div class="btn btn-success btn_volver">Volver</div></a>
+                </div>
               </div>
-            </div>        
-            <div class="margen"></div>
-            <div class="center">
-              <div class="btns">
-                <?php if(isset($curso_edit)){ ?>
-                <button id="btn_actualizar" class="btn btn-success btns_tamano">Actualizar</button>
-                <button id="btn_Eliminar" class="btn btn-success btns_tamano">Eliminar</button>
-                <?php } else { ?>
-                <div id="btn_guardar" class="btn btn-success btn_volver">Guardar</div>
-                <?php } ?>
-                <a href="curso.php"><div class="btn btn-success btn_volver">Volver</div></a>
-              </div>
-            </div>
-            <div class="margen"></div>
+              <div class="margen"></div>
+            </div>  
           </div>  
         </div>  
-      </div>  
         <!--Ventana emergente contacto -->
-      <div id="fondo_pop" class="popup-overlay"></div>
-      <div id="mensaje_form" class="popup" >
-        <div class="content-popup">
-          <div>
-            <div id="btn_cerrar"></div>
-            <div id="texto_mensaje"> </div>
-          </div>
-          <div class="margen"></div>
-          <div class="center">
-            <div class="btn_confirmacion" style="display:none">
-              <button id="btn_confirmar" class="btn btn-success btns_tamano">Aceptar</button>
-              <button id="btn_cancelar" class="btn btn-dark btns_tamano">Cancelar</button>
+        <div id="fondo_pop" class="popup-overlay"></div>
+        <div id="mensaje_form" class="popup" >
+          <div class="content-popup">
+            <div>
+              <div id="btn_cerrar"></div>
+              <div id="texto_mensaje"> </div>
             </div>
+            <div class="margen"></div>
+            <div class="center">
+              <div class="btn_confirmacion" style="display:none">
+                <button id="btn_confirmar" class="btn btn-success btns_tamano">Aceptar</button>
+                <button id="btn_cancelar" class="btn btn-dark btns_tamano">Cancelar</button>
+              </div>
+            </div>
+            <div class="margen"></div>
           </div>
-          <div class="margen"></div>
         </div>
-      </div>
-      <div id="div_cargando" class="fondo_block">
-        <img src="img/cargando.gif" class="img_cargando">
+        <div id="div_cargando" class="fondo_block">
+          <img src="img/cargando.gif" class="img_cargando">
+        </div>
       </div>
     </div>
   </body>

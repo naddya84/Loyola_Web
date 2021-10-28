@@ -24,7 +24,6 @@ if( isset( $curso_json->id ) ){
     ->find_one();
 } else {
   $curso = ORM::for_table('course')->create();
-  $curso->status = "Activo";  
 }
   
 if( isset($curso_json->nombre) ){
@@ -56,7 +55,21 @@ if( isset($curso_json->password) ){
 }
 if( isset($curso_json->lugar) ){
   $curso->locale = $curso_json->lugar;  
+}   
+if( isset($curso_json->estado) ){
+  $curso->status = $curso_json->estado;  
+}
+if( isset($curso_json->url) ){
+  $curso->url = $curso_json->url;  
 } 
+/*Eliminar foto curso*/
+if( isset($curso_json->eliminar_foto) ){        
+  if( file_exists('../uploads/foto_curso/'.$curso->id."/".$curso_json->eliminar_foto) ){
+    unlink('../uploads/foto_curso/'.$curso->id."/".$curso_json->eliminar_foto);
+  } 
+  $curso->photo = NULL;
+}
+
 ORM::get_db()->beginTransaction();
 
 if( $curso->save() ){ 
@@ -98,4 +111,3 @@ if( $curso->save() ){
   ));
   ORM::get_db()->rollBack();    
 }
-

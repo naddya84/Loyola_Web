@@ -79,7 +79,10 @@ function iniciar(){
   });
   
   $("#btn_actualizar").click(function() {
-    registro_curso();    
+    if( validar_datos() ){
+      $("#div_cargando").fadeIn();
+      registro_curso();
+    }   
   });
      
   $("#btn_confirmar").click(function () {       
@@ -90,6 +93,11 @@ function iniciar(){
   $("#btn_Eliminar").click(function() {
     $(".btn_confirmacion").fadeIn(); 
     mostrar_alerta("¿Seguro que desea eliminar el curso?");
+  });
+  
+  $("#btn_eliminar_foto").click( function (){
+    foto_eliminar = $("#foto").val(); 
+    $(".contiene_foto").html("");
   });
   
   $("#btn_cerrar,#btn_cancelar").click(function () {       
@@ -105,7 +113,8 @@ function registro_curso(){
     duracion: $.trim($("#duracion_curso").val()),
     expositor:$.trim($("#expositor").val()),
     fecha_inicio: $("#fecha_inicio").val(),
-    fecha_fin: $("#fecha_fin").val()
+    fecha_fin: $("#fecha_fin").val(),
+    estado: $("#estado").val()
   };
   
   if( $("#id_curso").val() > 0 ){
@@ -115,7 +124,9 @@ function registro_curso(){
   if ( foto_curso != "" ){
       curso.foto = foto_curso;
   }
-  
+  if( foto_eliminar != "" ){ 
+    curso.eliminar_foto = foto_eliminar;   console.log("fotoes:"+foto_eliminar);
+  }
   if ($("input[name='radio']:checked").val() == 0 ) {
     curso.url = $.trim( $("#url_curso").val());
     curso.codigo = $.trim( $("#codigo").val());

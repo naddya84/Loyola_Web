@@ -57,7 +57,7 @@ body {
   filter: alpha(opacity=70);   
   color: white;
   display: none;
-  z-index: 2;
+  z-index: 20;
 }
 #btn_cerrar {
   background: url('../img/btn_cerrar.png') top left no-repeat;
@@ -375,10 +375,24 @@ body {
   background: #d9f3df;
 }
 .css_foto{
-  width: 50%;
+  width: 40%;
 }
 .div_dropzone{
-  width: 50%;
+  width: 100px;
+}
+.tm_estado{
+  width:20%;
+}
+.radio{
+  display: inline;
+  position: relative;
+  top: 5px;
+  height: 23px;
+  width: 30px;
+  border-radius: 100%;
+}
+.dropzone {
+  width: 57%;
 }
 /*funcionalidad responsiva*/
 @media screen and (max-width:1040px){
