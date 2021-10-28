@@ -56,10 +56,36 @@ if( isset($curso_json->password) ){
 }
 if( isset($curso_json->lugar) ){
   $curso->locale = $curso_json->lugar;  
-}
+} 
 ORM::get_db()->beginTransaction();
 
 if( $curso->save() ){ 
+  if( isset($curso_json->foto) ){
+    $ds = "/";  
+    $tempStoreFolder = '..'.$ds.'uploads'.$ds.session_id().$ds;
+    $storeFolder = '..'.$ds.'uploads/foto_curso'.$ds.$curso->id.$ds;
+
+    if (!file_exists( $storeFolder )) {
+      if ( !mkdir( $storeFolder, 0777, true) ){
+        ORM::get_db()->rollBack();
+        die ( json_encode(array(
+          "success" => false,
+          "reason" => "No se pudo crear el directorio para subir los archivos"
+        )));
+      }
+    }
+
+    if( !rename( $tempStoreFolder.$curso_json->foto, $storeFolder.$curso_json->foto) ){    
+      echo json_encode(array(
+        "success" => false,      
+        "reason" => "No se puede copiar la foto"
+      ));  
+      die();
+    }
+    $curso->photo = $curso_json->foto;
+    $curso->save();   
+  }
+  
   echo json_encode(array(
     "success" => true      
     ));

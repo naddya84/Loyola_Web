@@ -1,9 +1,7 @@
 //Variables para la carga de documentos
 var my_drop;
-var doc_declaracion = "";
-var doc_memory = "";
-var eliminar_declaracion = "";
-var eliminar_memory = "";
+var foto_curso = "";
+var foto_eliminar = "";
 
 Dropzone.options.myDropzone = {
   paramName: "file", // The name that will be used to transfer the file
@@ -26,17 +24,17 @@ Dropzone.options.myDropzone = {
         response = JSON.parse( response );
         if( response.success ){          
           file_upload = file;
-          foto_firma = file.name;
+          foto_curso = file.name;
         } else {
-          mostrar_alerta("No se pudo subir la firma, guarde los cambios y actualice la pagina: "+response.reason);
+          mostrar_alerta("No se pudo subir la foto, guarde los cambios y actualice la pagina: "+response.reason);
         }
       } catch ( error ){
-        mostrar_alerta("No se pudo subir la firma, guarde los cambios y actualice la pagina");
+        mostrar_alerta("No se pudo subir la foto, guarde los cambios y actualice la pagina");
       } 
     });       
     this.on("removedfile", function(file) {             
       console.log("Borrar el archivo: "+file.name);
-      foto_firma = null;
+      foto_curso = null;
       delete_foto(file.name);
     });
     
@@ -79,7 +77,21 @@ function iniciar(){
       registro_curso();
     }
   });
-
+  
+  $("#btn_actualizar").click(function() {
+    registro_curso();    
+  });
+     
+  $("#btn_confirmar").click(function () {       
+    $("#div_cargando").fadeIn();
+    eliminar_curso();
+  });
+  
+  $("#btn_Eliminar").click(function() {
+    $(".btn_confirmacion").fadeIn(); 
+    mostrar_alerta("¿Seguro que desea eliminar el curso?");
+  });
+  
   $("#btn_cerrar,#btn_cancelar").click(function () {       
     cerrar_alerta();
   }); 
@@ -95,17 +107,29 @@ function registro_curso(){
     fecha_inicio: $("#fecha_inicio").val(),
     fecha_fin: $("#fecha_fin").val()
   };
-    
+  
+  if( $("#id_curso").val() > 0 ){
+    curso.id = $("#id_curso").val();
+  }
+  
+  if ( foto_curso != "" ){
+      curso.foto = foto_curso;
+  }
+  
   if ($("input[name='radio']:checked").val() == 0 ) {
     curso.url = $.trim( $("#url_curso").val());
     curso.codigo = $.trim( $("#codigo").val());
     curso.password = $.trim( $("#password").val());
     curso.tipo = "Virtual";
+    curso.lugar = "";
     }
     
   if ($("input[name='radio']:checked").val() == 1 ) {
     curso.lugar = $.trim( $("#lugar").val());
     curso.tipo = "Presencial";
+    curso.url = "";
+    curso.codigo = "";
+    curso.password = "";
   }
     
   fetch("services/set_curso.php", {
@@ -223,4 +247,50 @@ function cerrar_alerta(){
   $("#popup").fadeOut();
   $('.popup-overlay').fadeOut('slow');
   $('.popup-bloqueo').fadeOut();
+}
+function eliminar_curso(){
+  var data = {
+    id_curso : $("#id_curso").val()
+  };    
+ 
+  fetch('services/del_curso.php',  {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: JSON.stringify(data), 
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(function(response) {      
+    return response.json();
+  })
+  .then(function(response) {              
+    if( response.success ){
+      window.location.href = "curso.php";      
+    } else {
+      $("#div_cargando").fadeOut();
+      mostrar_alerta("No se pudo eliminar el curso: "+response.reason);
+    }
+  })
+  .catch( function(error){        
+    console.error(error);        
+    $("#div_cargando").fadeOut();
+    mostrar_alerta("No se pudo acceder a eliminar");
+  });
+}
+function delete_foto(name_file) {
+  var url = 'services/deletesupload.php';
+  var data = {name_delete: name_file};
+
+  fetch(url, {
+    method: 'POST', // or 'PUT'
+    body: JSON.stringify(data), // data can be `string` or {object}!
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(res => res.json())
+  .catch(error => console.error('Error:', error))
+  .then( function (response) { 
+    console.log('Success:', response);
+  });
 }

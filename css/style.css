@@ -374,6 +374,12 @@ body {
   border: solid 1px #adebbb;
   background: #d9f3df;
 }
+.css_foto{
+  width: 50%;
+}
+.div_dropzone{
+  width: 50%;
+}
 /*funcionalidad responsiva*/
 @media screen and (max-width:1040px){
   .cerrar_sesion {

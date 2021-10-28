@@ -53,22 +53,21 @@ $curso_edit = ORM::for_table('course')
           <div class="espacio_contenedor"></div>
           <div class="card bg-ligth">
             <div class="card-body">
-              <?php if(isset($curso_edit)){ ?>
-              <div class="center color_datos"><h4>Información del Curso</h4></div>
-              <?php } else { ?>
-              <div class="center color_datos"><h4>Registro Curso</h4></div>  
-              <?php } ?>
+              <div class="center color_datos"><h4><?=isset($curso_edit)?"Registro Curso":"Información del Curso"?></h4></div>  
               <div class="margen"></div>
               <div class="row">
-                <div class="col-3">
+                <?php if(isset($curso_edit) && $curso_edit->photo){ ?>
+                <div class="col-4" class="contiene_foto">
+                  <img src="uploads/foto_curso/<?=$curso_edit->id."/".$curso_edit->photo?>" class="css_foto">
+                  <img src="img/ico_eliminar.png" class="btn_eliminar_foto" id="<?=$curso_edit->id?>">
+                </div>
+                <?php }?>
+                <div class="col-6">
                   <div class="margen"></div>
-                  <div id="doc_declaracion">
                     <div class="div_dropzone">
                       <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
                     </div>
-                  </div>
                 </div>
-                <div class="col-9"></div>
               </div>
               <div class="margen"></div>
               <div class="color_datos"><strong>Datos del Curso:</strong></div>
@@ -77,16 +76,16 @@ $curso_edit = ORM::for_table('course')
                   <div class="row">
                     <div class="col-6">
                       <div class="desc_datos left">Titulo Curso:</div> 
-                      <input id="nombre_curso" class="color_datos form-control" <?= isset($curso_edit) ? "value='" .$curso_edit->name. "'" : "" ?>>
+                      <input id="nombre_curso" class="form-control" <?= isset($curso_edit) ? "value='" .$curso_edit->name. "'" : "" ?>>
                     </div>
                     <div class="col-6">
                       <div class="desc_datos left">Duración:</div>
-                      <input type="text" id="duracion_curso" class="form-control" <?=isset($curso_edit->time)?>>
+                      <input type="text" id="duracion_curso" class="form-control" <?=isset($curso_edit)? "value='" .$curso_edit->time. "'" : ""?>>
                     </div>
                   </div>
                   <br>
                   <label class="desc_datos">Expositor:</label>
-                  <input type="text" id="expositor" class="form-control"> 
+                  <input type="text" id="expositor" class="form-control" <?=isset($curso_edit)? "value='" .$curso_edit->expositor. "'" : ""?>> 
                   <br>
                   <div class="row"> 
                     <div class="col-6">
@@ -120,30 +119,30 @@ $curso_edit = ORM::for_table('course')
                   <div class="form-group row">
                     <div class="col-lg">
                       <span class="margen_desc desc_datos">Tipo de Curso:</span>
-                      <strong class="desc_datos"> Virtual</strong> <input id="virtual" type="radio" name="radio" value="0" class="radio"/>
-                      <strong class="desc_datos margen_left">Presencial </strong><input id="presencial" type="radio" name="radio" value="1" class="radio"/>
+                      <strong class="desc_datos"> Virtual</strong> <input id="virtual" type="radio" name="radio" value="0" class="radio" <?=isset($curso_edit)?($curso_edit->type == "Virtual")?'checked="checked"':'':''?>/>
+                      <strong class="desc_datos margen_left">Presencial </strong><input id="presencial" type="radio" name="radio" value="1" class="radio" <?=isset($curso_edit)?($curso_edit->type == "Presencial")?'checked="checked"':'':''?>/>
                     </div>
                   </div>
                   <div class="css_espacio_form"></div>
-                  <div id="datos_curso" style="display: none">
+                  <div id="datos_curso" <?=isset($curso_edit)?($curso_edit->type == "Virtual")?'style="display: block"':'style="display: none"':'style="display: none"'?>>
                     <div class="card bg_url">
                       <div class="card-body">
-                        <div class="color_datos">Completa la siguiente información:</div>
+                        <div class="color_datos"><?=isset($curso_edit)?'Información del curso:':'Completa la siguiente información:'?></div>
                         <div class="margen"></div>
                         <div class="desc_zoom left">URL:</div>
-                        <input type="text" id="url_curso" class="form-control tm_input">
+                        <input type="text" id="url_curso" class="form-control tm_input color_datos" <?=(isset($curso_edit)?"value='" .$curso_edit->url. "'" : "")?>>
                         <div class="css_espacio_form"></div>
                         <span class="desc_zoom left">Código: </span>
-                        <input type="text" id="codigo" class="form-control color_datos tm_input">
+                        <input type="text" id="codigo" class="form-control color_datos tm_input" <?=(isset($curso_edit)?"value='" .$curso_edit->code. "'" : "")?>>
                         <div class="css_espacio_form"></div>
                         <span class="desc_zoom left">Contraseña: </span>
-                        <input type="text" id="password" class="form-control color_datos tm_input">
-                      </div>
-                    </div>
+                        <input type="text" id="password" class="form-control color_datos tm_input" <?=(isset($curso_edit)?"value='" .$curso_edit->password. "'" : "")?>>
+                      </div> 
+                   </div>
                   </div>
-                  <div id="lugar_curso" style="display: none">
+                  <div id="lugar_curso" <?=isset($curso_edit)?($curso_edit->type == "Presencial")?'style="display: block"':'style="display: none"':'style="display: none"'?>>
                     <label>Dirección y Lugar:</label>
-                    <input type="text" id="lugar" class="form-control">
+                    <input type="text" id="lugar" class="form-control"<?=(isset($curso_edit)?"value='" .$curso_edit->locale. "'" : "")?>>
                   </div>
               </div>
             </div>        
@@ -156,7 +155,7 @@ $curso_edit = ORM::for_table('course')
                 <?php } else { ?>
                 <div id="btn_guardar" class="btn btn-success btn_volver">Guardar</div>
                 <?php } ?>
-                <a href="asamblea.php"><div class="btn btn-success btn_volver">Volver</div></a>
+                <a href="curso.php"><div class="btn btn-success btn_volver">Volver</div></a>
               </div>
             </div>
             <div class="margen"></div>

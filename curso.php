@@ -85,19 +85,25 @@ $cursos = ORM::for_table('course')
               $index = 1 + ($pagina_actual*$items_x_pagina); ?>
             <div class="row bg_cabecera_row">
               <div class="col-1">Nro</div>
-              <div class="col-3">Nombre</div>
+              <div class="col-2">Nombre</div>
+              <div class="col">Tipo</div>
               <div class="col">Fecha Inicio</div>
               <div class="col">Fecha Fin</div>
+              <div class="col">Duración</div>
+              <div class="col">Estado</div>
               <div class="col"></div>
             </div>
             <?php foreach($cursos as $curso){ ?>
             <div class="row bg_col_row">
               <div class="col-1"><?=$index ++?></div>
-              <div class="col-3"><?=$curso->name?></div>
+              <div class="col-2"><?=$curso->name?></div>
+              <div class="col"><?=$curso->type?></div>
               <div class="col"><?=$curso->start_date?> </div>
               <div class="col"><?=$curso->end_date?></div>
+              <div class="col"><?=$curso->time?></div>
+              <div class="col"><?=$curso->status?></div>
               <div class="col">
-                <a href="#">
+                <a href="registro_curso.php?id_curso=<?=$curso->id?>">
                   <img src="img/ico_revisar.png"><span class="font_accion"> Editar</span>
                 </a>
               </div>
