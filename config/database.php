@@ -14,7 +14,7 @@ date_default_timezone_set("America/La_Paz");
 define ('HOST', "localhost");
 define ('NAME_DB', "loyola_app");
 define ('USER_DB', "root");
-define ('PASSWD_DB', "root");
+define ('PASSWD_DB', "");
 define ('IS_LINUX', false);
 
 define("SMTP_SERVER", false);
