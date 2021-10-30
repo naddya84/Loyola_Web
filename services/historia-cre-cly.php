@@ -2,9 +2,9 @@
 
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
-$u_id = $_GET['u_id'];
+$docuCage = $_GET['docu-cage'];
 
-if(!empty($u_id)) {
+if(!empty($docuCage)) {
 
     $data = <<<'HEY'
     {
@@ -14,20 +14,20 @@ if(!empty($u_id)) {
             "2": ""
         },
         "errorCode": 0,
-        "result":
+        "result":    
         [
             {
-                "credNumero":"1",
-                "credFecDesem":"23",
-                "credMontoDesem": "20",
+                "credNumero": "100117521",
+                "credFecDesem": "23/09/2011",
+                "credMontoDesem": "20,000.00",
                 "crediMoneda": "$US",
                 "crediSaldo": "0.00",
                 "crediEstado": "CANCELADO",
-                "crediFecCancel": "10"
+                "crediFecCancel": "10/06/2015"
             },
             {
-                "credNumero":"2",
-                "credFecDesem":"30/09/2013",
+                "credNumero": "130118038",
+                "credFecDesem": "30/09/2013",
                 "credMontoDesem": "65,000.00",
                 "crediMoneda": "Bs",
                 "crediSaldo": "0.00",
@@ -35,8 +35,8 @@ if(!empty($u_id)) {
                 "crediFecCancel": "10/06/2015"
             },
             {
-                "credNumero": "3",
-                "credFecDesem":"10/06/2015",
+                "credNumero": "131490",
+                "credFecDesem": "10/06/2015",
                 "credMontoDesem": "223,000.00",
                 "crediMoneda": "Bs",
                 "crediSaldo": "0.00",
@@ -44,8 +44,8 @@ if(!empty($u_id)) {
                 "crediFecCancel": "11/08/2017"
             },
             {
-                "credNumero": "4",
-                "credFecDesem":"18/11/2016",
+                "credNumero": "131665",
+                "credFecDesem": "18/11/2016",
                 "credMontoDesem": "65,000.00",
                 "crediMoneda": "Bs",
                 "crediSaldo": "0.00",
@@ -53,8 +53,8 @@ if(!empty($u_id)) {
                 "crediFecCancel": "28/09/2018"
             },
             {
-                "credNumero":"5",
-                "credFecDesem":"11/08/2017",
+                "credNumero": "131729",
+                "credFecDesem": "11/08/2017",
                 "credMontoDesem": "365,000.00",
                 "crediMoneda": "Bs",
                 "crediSaldo": "239,014.67",
