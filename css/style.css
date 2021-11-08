@@ -391,8 +391,8 @@ body {
   width: 30px;
   border-radius: 100%;
 }
-.dropzone {
-  width: 57%;
+.div_dropzone_doc{
+  width: 100%;
 }
 /*funcionalidad responsiva*/
 @media screen and (max-width:1040px){

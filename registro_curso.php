@@ -61,11 +61,11 @@ $curso_edit = ORM::for_table('course')
               <div class="col-4 contiene_foto">
                 <input type="hidden" id="foto" value="<?=$curso_edit->photo?>">
                 <img src="img/ico_eliminar.png" class="cursor" id="btn_eliminar_foto">
-                <img src="uploads/foto_curso/<?=$curso_edit->id."/".$curso_edit->photo?>" class="css_foto">
+                <img src="uploads/curso/<?=$curso_edit->id."/".$curso_edit->photo?>" class="css_foto">
               </div>
               <?php }?>
                 
-              <div class="col-6 div_dropzone">
+              <div class="col-3">
                 <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
               </div>
               </div>
@@ -79,13 +79,19 @@ $curso_edit = ORM::for_table('course')
                       <input id="nombre_curso" class="form-control" <?= isset($curso_edit) ? "value='" .$curso_edit->name. "'" : "" ?>>
                     </div>
                     <div class="col-6">
-                      <div class="desc_datos left">Duración:</div>
-                      <input type="text" id="duracion_curso" class="form-control" <?=isset($curso_edit)? "value='" .$curso_edit->time. "'" : ""?>>
+                      <div class="desc_datos left">Horario:</div>
+                      <input type="text" id="horario" class="form-control" <?=isset($curso_edit)? "value='" .$curso_edit->schedule. "'" : ""?>>
                     </div>
                   </div>
                   <br>
-                  <label class="desc_datos">Expositor:</label>
-                  <input type="text" id="expositor" class="form-control" <?=isset($curso_edit)? "value='" .$curso_edit->expositor. "'" : ""?>> 
+                  <div class="row">
+                    <div class="col-1">
+                      <label class="desc_datos">Expositor:</label>
+                    </div>
+                    <div class="col">
+                      <input type="text" id="expositor" class="form-control" <?=isset($curso_edit)? "value='" .$curso_edit->expositor. "'" : ""?>> 
+                    </div>
+                  </div>
                   <br>
                   <div class="row"> 
                     <div class="col-6">
@@ -118,7 +124,7 @@ $curso_edit = ORM::for_table('course')
                   <br>
                   <div class="form-group row">
                     <div class="col-lg">
-                      <span class="margen_desc desc_datos">Tipo de Curso:</span>
+                      <span class="margen_desc desc_datos">Modalidad:</span>
                       <strong class="desc_datos"> Virtual</strong> <input id="virtual" type="radio" name="radio" value="0" class="radio" <?=isset($curso_edit)?($curso_edit->type == "Virtual")?'checked="checked"':'':''?>/>
                       <strong class="desc_datos margen_left">Presencial </strong><input id="presencial" type="radio" name="radio" value="1" class="radio" <?=isset($curso_edit)?($curso_edit->type == "Presencial")?'checked="checked"':'':''?>/>
                     </div>
@@ -141,8 +147,21 @@ $curso_edit = ORM::for_table('course')
                     </div>
                   </div>
                   <div id="lugar_curso" <?=isset($curso_edit)?($curso_edit->type == "Presencial")?'style="display: block"':'style="display: none"':'style="display: none"'?>>
-                    <label>Dirección y Lugar:</label>
-                    <input type="text" id="lugar" class="form-control"<?=(isset($curso_edit)?"value='" .$curso_edit->locale. "'" : "")?>>
+                    <label class="desc_datos">Dirección y Lugar:</label>
+                    <input type="text" id="lugar" class="form-control"<?=(isset($curso_edit)?"value='" .$curso_edit->location. "'" : "")?>>
+                  </div>
+                  <div class="margen"></div>
+                  <label class="desc_datos">Documento del curso ( subir en Formato PDF ):</label>
+                  <?php if(isset($curso_edit) && $curso_edit->document != null){   ?>
+                  <div class="contenedor_doc">
+                    <input type="hidden" id="documento" value="<?=$curso_edit->document?>">
+                    <img src="img/ico_eliminar.png" class="cursor" id="btn_eliminar_documento">
+                    <a href="<?='uploads/curso/'.$curso_edit->id.'/'.$curso_edit->document?>" target="_blank"><?=$curso_edit->document?></a>
+                  </div>
+                  <?php } ?>
+                  <div class="margen"></div>
+                  <div class="div_dropzone_doc">
+                    <form action="services/photoupload.php" class="dropzone" id="my-dropzone-d" method="POST"></form>
                   </div>
                   <br>
                   <label class="left">Estado:</label>

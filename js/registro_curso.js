@@ -2,6 +2,8 @@
 var my_drop;
 var foto_curso = "";
 var foto_eliminar = "";
+var doc_curso = "";
+var doc_curso_eliminar = "";
 
 Dropzone.options.myDropzone = {
   paramName: "file", // The name that will be used to transfer the file
@@ -32,12 +34,48 @@ Dropzone.options.myDropzone = {
         mostrar_alerta("No se pudo subir la foto, guarde los cambios y actualice la pagina");
       } 
     });       
-    this.on("removedfile", function(file) {             
-      console.log("Borrar el archivo: "+file.name);
+    this.on("removedfile", function(file) {          
       foto_curso = null;
-      delete_foto(file.name);
+      delete_file(file.name);
     });
-    
+  }
+};
+
+Dropzone.options.myDropzoneD = {
+  paramName: "file", // The name that will be used to transfer the file
+  maxFilesize: 20, // MB
+  maxFiles: 50,
+  acceptedFiles: "application/pdf",
+  forceChunking: true,
+  resizeQuality: 0.2,
+  resizeWidth: 1500,
+  dictDefaultMessage: "<div class='centrear_elemento'><div class='desc_datos left'>Sube el documento del curso aquí &nbsp;</div><img src='img/ico_documento.png' class='left'></div><br>",
+  dictFallbackMessage: "Tu navegador no soporta la subida de archivos",
+  dictFileTooBig: "El archivo que intentas subir pesa mucho {{filesize}}, límite {{maxFilesize}} ",
+  dictInvalidFileType: "Solo se pueden subir imágenes",
+  dictRemoveFile: "<div class='font_borrar_img'>Borrar</div>",
+  addRemoveLinks: true,
+  init: function () {
+    my_drop = this;
+    this.on("success", function (file, response) {      
+      try{
+        response = JSON.parse( response );
+        if( response.success ){          
+          file_upload = file;
+          doc_curso = file.name ;      
+        } else {
+          mostrar_alerta("No se pudo subir el documento, guarde los cambios y actualice la pagina: "+response.reason);
+        }
+      } catch ( error ){
+        mostrar_alerta("No se pudo subir el documento, guarde los cambios y actualice la pagina");
+      }      
+    });
+
+    this.on("removedfile", function(file) {   
+      doc_curso = null;
+      delete_file(file.name);
+    });
+
   }
 };
 
@@ -100,6 +138,11 @@ function iniciar(){
     $(".contiene_foto").html("");
   });
   
+  $("#btn_eliminar_documento").click( function (){
+    doc_curso_eliminar = $("#documento").val(); 
+    $(".contenedor_doc").html("");
+  });
+  
   $("#btn_cerrar,#btn_cancelar").click(function () {       
     cerrar_alerta();
   }); 
@@ -110,7 +153,7 @@ function registro_curso(){
 
   var curso = {
     nombre: $("#nombre_curso").val(),
-    duracion: $.trim($("#duracion_curso").val()),
+    horario: $.trim($("#horario").val()),
     expositor:$.trim($("#expositor").val()),
     fecha_inicio: $("#fecha_inicio").val(),
     fecha_fin: $("#fecha_fin").val(),
@@ -122,11 +165,18 @@ function registro_curso(){
   }
   
   if ( foto_curso != "" ){
-      curso.foto = foto_curso;
+   curso.foto = foto_curso;
   }
   if( foto_eliminar != "" ){ 
-    curso.eliminar_foto = foto_eliminar;   console.log("fotoes:"+foto_eliminar);
+    curso.eliminar_foto = foto_eliminar;   
   }
+  if ( doc_curso != "" ){
+    curso.doc_curso = doc_curso;
+  }
+  if( doc_curso_eliminar != "" ){ 
+    curso.eliminar_doc = doc_curso_eliminar;   
+  }
+  
   if ($("input[name='radio']:checked").val() == 0 ) {
     curso.url = $.trim( $("#url_curso").val());
     curso.codigo = $.trim( $("#codigo").val());
@@ -142,7 +192,7 @@ function registro_curso(){
     curso.codigo = "";
     curso.password = "";
   }
-    
+ 
   fetch("services/set_curso.php", {
       method: 'POST',
       credentials: 'same-origin',
@@ -166,7 +216,7 @@ function registro_curso(){
       console.error(error);
       $("#div_cargando").fadeOut();
       mostrar_alerta("No se pudo crear el curso");
-    });
+    }); 
 }
 
 function delete_file(name_file, array) {
@@ -196,8 +246,8 @@ function validar_datos() {
     mostrar_alerta("Ingresa el titulo del curso");
     return false;
   } 
-  if ($.trim($("#duracion_curso").val()) === '') {
-    mostrar_alerta("Ingresa la duración del curso, por favor");
+  if ($.trim($("#horario").val()) === '') {
+    mostrar_alerta("Ingresa el horario del curso, por favor");
     return false;
   }
   if ($.trim($("#expositor").val()) === '') {
@@ -289,19 +339,19 @@ function eliminar_curso(){
     mostrar_alerta("No se pudo acceder a eliminar");
   });
 }
-function delete_foto(name_file) {
+function delete_file(name_file) {
   var url = 'services/deletesupload.php';
   var data = {name_delete: name_file};
 
   fetch(url, {
-    method: 'POST', // or 'PUT'
-    body: JSON.stringify(data), // data can be `string` or {object}!
+    method: 'POST', 
+    body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json'
     }
   }).then(res => res.json())
   .catch(error => console.error('Error:', error))
-  .then( function (response) { 
+  .then( function (response) {    
     console.log('Success:', response);
   });
-}
+} 

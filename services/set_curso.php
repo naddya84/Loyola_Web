@@ -29,8 +29,8 @@ if( isset( $curso_json->id ) ){
 if( isset($curso_json->nombre) ){
   $curso->name = $curso_json->nombre;  
 }
-if( isset($curso_json->duracion) ){
-  $curso->time = $curso_json->duracion;  
+if( isset($curso_json->horario) ){
+  $curso->schedule = $curso_json->horario;  
 }
 if( isset($curso_json->expositor) ){
   $curso->expositor = $curso_json->expositor;  
@@ -54,7 +54,7 @@ if( isset($curso_json->password) ){
   $curso->password = $curso_json->password;  
 }
 if( isset($curso_json->lugar) ){
-  $curso->locale = $curso_json->lugar;  
+  $curso->location = $curso_json->lugar;  
 }   
 if( isset($curso_json->estado) ){
   $curso->status = $curso_json->estado;  
@@ -64,10 +64,17 @@ if( isset($curso_json->url) ){
 } 
 /*Eliminar foto curso*/
 if( isset($curso_json->eliminar_foto) ){        
-  if( file_exists('../uploads/foto_curso/'.$curso->id."/".$curso_json->eliminar_foto) ){
-    unlink('../uploads/foto_curso/'.$curso->id."/".$curso_json->eliminar_foto);
+  if( file_exists('../uploads/curso/'.$curso->id."/".$curso_json->eliminar_foto) ){
+    unlink('../uploads/curso/'.$curso->id."/".$curso_json->eliminar_foto);
   } 
   $curso->photo = NULL;
+}
+/*Eliminar documento del  curso*/
+if( isset($curso_json->eliminar_doc) ){        
+  if( file_exists('../uploads/curso/'.$curso->id."/".$curso_json->eliminar_doc) ){
+    unlink('../uploads/curso/'.$curso->id."/".$curso_json->eliminar_doc);
+  } 
+  $curso->document = NULL;
 }
 
 ORM::get_db()->beginTransaction();
@@ -76,7 +83,7 @@ if( $curso->save() ){
   if( isset($curso_json->foto) ){
     $ds = "/";  
     $tempStoreFolder = '..'.$ds.'uploads'.$ds.session_id().$ds;
-    $storeFolder = '..'.$ds.'uploads/foto_curso'.$ds.$curso->id.$ds;
+    $storeFolder = '..'.$ds.'uploads/curso'.$ds.$curso->id.$ds;
 
     if (!file_exists( $storeFolder )) {
       if ( !mkdir( $storeFolder, 0777, true) ){
@@ -98,7 +105,32 @@ if( $curso->save() ){
     $curso->photo = $curso_json->foto;
     $curso->save();   
   }
-  
+  /*guardamos el documento del curso*/
+  if( isset($curso_json->doc_curso) ){    
+    $ds = "/";  
+    $tempStoreFolder = '../uploads'.$ds.session_id().$ds;
+    $storeFolder = '../uploads/curso'.$ds.$curso->id().$ds;
+    
+    if (!file_exists( $storeFolder )) {        
+        if ( !mkdir( $storeFolder, 0777, true) ){
+          ORM::get_db()->rollBack();    
+          die ( json_encode(array(
+            "success" => false,
+            "reason" => "No se pudo crear el directorio para guardar los archivos"
+          )));
+        }
+    }      
+    if( !rename( $tempStoreFolder.$curso_json->doc_curso, $storeFolder.$curso_json->doc_curso) ){
+      ORM::get_db()->rollBack();    
+      echo json_encode(array(
+            "success" => false,      
+            "reason" => "No se puede copiar el documento"
+      ));  
+      die();  
+    }
+    $curso->document = $curso_json->doc_curso;
+    $curso->save();   
+  }
   echo json_encode(array(
     "success" => true      
     ));

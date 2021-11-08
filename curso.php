@@ -89,7 +89,6 @@ $cursos = ORM::for_table('course')
               <div class="col">Tipo</div>
               <div class="col">Fecha Inicio</div>
               <div class="col">Fecha Fin</div>
-              <div class="col">Duración</div>
               <div class="col">Estado</div>
               <div class="col"></div>
             </div>
@@ -100,7 +99,6 @@ $cursos = ORM::for_table('course')
               <div class="col"><?=$curso->type?></div>
               <div class="col"><?=$curso->start_date?> </div>
               <div class="col"><?=$curso->end_date?></div>
-              <div class="col"><?=$curso->time?></div>
               <div class="col"><?=$curso->status?></div>
               <div class="col">
                 <a href="registro_curso.php?id_curso=<?=$curso->id?>">
