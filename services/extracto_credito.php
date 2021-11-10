@@ -10,15 +10,15 @@ $credNumber = $_GET['cred-number'];
 
 if(!empty($docuCage)) {
 
-    $data = ORM::for_table('plan_pago_cly')
+    $data = ORM::for_table('extracto_credito')
         ->where("id_credito", $credNumber)
         ->where("id_member",$docuCage)
         ->find_array();
         
     if(!is_null($data) && !empty($data)) {
 
-        $dataDetail = ORM::for_table('detalle_plan_pago_cly')
-        ->where("id_plan_pago_cly", $data[0]["id"])
+        $dataDetail = ORM::for_table('detalle_extracto_credito')
+        ->where("id_extracto_credito", $data[0]["id"])
         ->find_array();
         
         $dataArray = array(
@@ -32,7 +32,7 @@ if(!empty($docuCage)) {
 
     } else {
         
-        $data = array("error" => true, "msg" => 'No se logro encontrar el plan de pago');
+        $data = array("error" => true, "msg" => 'No se logro encontrar el extracto de credito');
 
         echo json_encode($data);
     }
