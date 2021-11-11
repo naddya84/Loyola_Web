@@ -8,11 +8,11 @@ header('Content-Type: application/json; charset=utf-8');
 $docuCage = $_GET['docu-cage'];
 $credNumber = $_GET['cred-number'];
 
-if(!empty($docuCage)) {
+if(!empty($docuCage) && !empty($credNumber)) {
 
     $data = ORM::for_table('plan_pago_cly')
         ->where("id_credito", $credNumber)
-        ->where("id_member",$docuCage)
+        ->where("id_member", $docuCage)
         ->find_array();
         
     if(!is_null($data) && !empty($data)) {
