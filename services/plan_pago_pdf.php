@@ -17,7 +17,7 @@ class PDF extends FPDF{
         $this->Cell(10,20,$subtitle);
         // Line break
         $this->Ln(20);
-        $this->Cell(62,10,'Fecha de emision: '. date('d-m-Y'),0,1,'R');  
+        $this->Cell(74,10,'Fecha de emision: '. date('d-m-Y H:m'),0,1,'R');  
 
     }
 
