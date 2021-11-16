@@ -7,15 +7,18 @@ class PDF extends FPDF{
         // Logo
         $this->Image($path_logo,170,6,30);
         //Move
-        $this->Cell(20);
+        $this->Cell(1);
         //Title
         $this->SetFont('Arial','',12);
-        $this->Cell(30,10,$title);
+        $this->Cell(10,10,$title);
         // SubTitle
+        $this->Cell(10);
         $this->SetFont('Arial','B', 12);
-        $this->Cell(30,20,$subtitle);
+        $this->Cell(10,20,$subtitle);
         // Line break
         $this->Ln(20);
+        $this->Cell(62,10,'Fecha de emision: '. date('d-m-Y'),0,1,'R');  
+
     }
 
     function createHeaderInformation(
@@ -132,15 +135,15 @@ class PDF extends FPDF{
             
             $this->Cell(20 ,7,$data[$i]["credNumCuota"],1,0,'C');
             $this->Cell(25 ,7,$data[$i]["credFecVenci"],1,0,'C');
-            $this->Cell(25 ,7,$data[$i]["credMontoCapi"],1,0,'C');
-            $this->Cell(25 ,7,$data[$i]["credMontoInte"],1,0,'C');  
-            $this->Cell(25 ,7,$data[$i]["credTotaCuota"],1,0,'C');
-            $this->Cell(25 ,7,$data[$i]["credMontoCargos"],1,0,'C');
+            $this->Cell(25 ,7,$data[$i]["credMontoCapi"],1,0,'R');
+            $this->Cell(25 ,7,$data[$i]["credMontoInte"],1,0,'R');  
+            $this->Cell(25 ,7,$data[$i]["credTotaCuota"],1,0,'R');
+            $this->Cell(25 ,7,$data[$i]["credMontoCargos"],1,0,'R');
 
             $total = $data[$i]["credMontoCapi"] + $data[$i]["credMontoInte"] + $data[$i]["credMontoCargos"];
-            $this->Cell(25 ,7,$total,1,0,'C');
+            $this->Cell(25 ,7,$total,1,0,'R');
 
-            $this->Cell(25 ,7,$data[$i]["credSaldoCredi"],1,1,'C');
+            $this->Cell(25 ,7,$data[$i]["credSaldoCredi"],1,1,'R');
             $count++;
         }
     }
