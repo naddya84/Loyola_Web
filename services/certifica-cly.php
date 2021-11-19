@@ -1,52 +1,40 @@
 <?php
+require_once '../config/database.php';
+require_once '../config/configure.php';
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
-$docuCage = $_GET['docu-cage']; //associate code
-$data = <<<'HEY'
-{
-    "error": false,
-    "errorMessage":{
-       "1": "",
-       "2": ""
-    },
-    "errorCode": 0,
-    "result":[
-        {
-          "certGestion": "2001",
-          "certNumero": "1081",
-          "certFecApert": "27-07-2001",
-          "certCanti": "1",
-          "certMonto": "65.30",
-          "certEstado": "VIGENTE"
-       },
-       {
-          "certGestion": "2003",
-          "certNumero": "8107",
-          "certFecApert": "04-04-2003",
-          "certCanti": "2",
-          "certMonto": "70.0",
-          "certEstado": "VIGENTE"
-       },
-       {
-          "certGestion": "2004",
-          "certNumero": "8961",
-          "certFecApert": "24-03-2004",
-          "certCanti": "2",
-          "certMonto": "80.0",
-          "certEstado": "VIGENTE"
-       },
-       {
-          "certGestion": "2005",
-          "certNumero": "9876",
-          "certFecApert": "23-03-2005",
-          "certCanti": "2",
-          "certMonto": "80.0",
-          "certEstado": "VIGENTE"
-       }
-    ]
+
+$docuCage = isset($_GET['docu-cage'])?$_GET['docu-cage']:null; //associate code
+if ($docuCage == null) {
+   die(json_encode([
+      'error'=> true,
+      'errorMessage'=> [
+         "1" =>'Valor docu-cage no especificado'
+      ],
+      'errorCode' => 0,
+      'result' => []
+   ]));
 }
-HEY;
 
-$dataArray = json_decode($data);
+$certificates = ORM::for_table('user_certificates')
+   // ->select('user.id_member')
+   ->select('user_certificates.year', 'certGestion')
+   ->select('user_certificates.number', 'certNumero')
+   ->select('user_certificates.opening_date', 'certFecApert')
+   ->select('user_certificates.amount', 'certCanti')
+   ->select('user_certificates.cost', 'certMonto')
+   ->select('user_certificates.state', 'certEstado')
+   ->join('user', ['user_certificates.user_id', '=', 'user.id'])
+   ->where('user.id_member', $docuCage)
+   ->order_by_desc('user_certificates.year')
+   ->find_array();
 
-echo json_encode($dataArray);
+
+echo json_encode([
+      'error'=> false,
+      'errorMessage'=> [
+      ],
+      'errorCode' => 0,
+      'result' => $certificates
+]);
