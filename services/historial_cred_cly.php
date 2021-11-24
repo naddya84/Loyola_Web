@@ -10,15 +10,29 @@ $docuCage = $_GET['docu-cage'];
 if(!empty($docuCage)) {
 
     $data = ORM::for_table('history_cred_cly')
-        ->where("id_member",$docuCage)
+        ->select('history_cred_cly.*')
+        ->join('user',['history_cred_cly.user_id','=','user.id'])
+        ->where('user.id_member', $docuCage)
+        ->order_by_desc('history_cred_cly.credNumero')
         ->find_array();
+
+    if(empty($data)) {
+        
+        $data = array("status" => 0, "error" => true,"msg" => 'No existe creditos asignados');
+
+        echo json_encode($data);
+        
+    } else {
+
+        $dataArray = array(
+            "member" => $docuCage,
+            "error" => false,
+            "result" => $data
+        );
+        echo json_encode($dataArray);
     
-    $dataArray = array(
-        "member" => $docuCage,
-        "error" => false,
-        "result" => $data
-    );
-    echo json_encode($dataArray);
+    }
+    
 
 } else {
     

@@ -14,8 +14,11 @@ if(!empty($docuCage) && !empty($credNumber)) {
             ->find_one();
 
     $data = ORM::for_table('extracto_credito')
-            ->where("id_credito", $credNumber)
-            ->where("id_member",$docuCage)
+            ->select('extracto_credito.*')
+            ->join('user', ['extracto_credito.user_id','=','user.id'])
+            ->join('history_cred_cly', ['extracto_credito.id_credito','=','history_cred_cly.id'])
+            ->where('history_cred_cly.id', $credNumber)
+            ->where('user.id_member', $docuCage)
             ->find_one();
 
     $dataDetail = ORM::for_table('detalle_extracto_credito')

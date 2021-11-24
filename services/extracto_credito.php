@@ -11,8 +11,11 @@ $credNumber = $_GET['cred-number'];
 if(!empty($docuCage)) {
 
     $data = ORM::for_table('extracto_credito')
-        ->where("id_credito", $credNumber)
-        ->where("id_member",$docuCage)
+        ->select('extracto_credito.*')
+        ->join('user', ['extracto_credito.user_id','=','user.id'])
+        ->join('history_cred_cly', ['extracto_credito.id_credito','=','history_cred_cly.id'])
+        ->where('history_cred_cly.id', $credNumber)
+        ->where('user.id_member', $docuCage)
         ->find_array();
         
     if(!is_null($data) && !empty($data)) {

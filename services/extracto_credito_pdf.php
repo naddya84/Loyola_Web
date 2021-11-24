@@ -128,7 +128,7 @@ class PDF extends FPDF{
             $this->Cell(24 ,7,$data[$i]["credMontoInte"],1,0,'R');  
             $this->Cell(24 ,7,$data[$i]["credMontoPenal"],1,0,'R');
             $this->Cell(24 ,7,$data[$i]["credMontoCargos"],1,0,'R');
-            $this->Cell(24 ,7,$data[$i]["credTotalpago"],1,0,'R');
+            $this->Cell(24 ,7,$data[$i]["credTotalPago"],1,0,'R');
             $this->Cell(24 ,7,$data[$i]["credSaldoCapi"],1,1,'R');
 
             $count++;
