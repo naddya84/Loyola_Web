@@ -9,11 +9,11 @@ $docuCage = $_GET['docu-cage'];
 
 if(!empty($docuCage)) {
 
-    $data = ORM::for_table('history_cred_cly')
-        ->select('history_cred_cly.*')
-        ->join('user',['history_cred_cly.user_id','=','user.id'])
+    $data = ORM::for_table('credit_history')
+        ->select('credit_history.*')
+        ->join('user',['credit_history.user_id','=','user.id'])
         ->where('user.id_member', $docuCage)
-        ->order_by_desc('history_cred_cly.credNumero')
+        ->order_by_asc('credit_history.credFechaDesem')
         ->find_array();
 
     if(empty($data)) {

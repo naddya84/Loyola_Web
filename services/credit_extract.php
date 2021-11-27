@@ -8,20 +8,21 @@ header('Content-Type: application/json; charset=utf-8');
 $docuCage = $_GET['docu-cage'];
 $credNumber = $_GET['cred-number'];
 
-if(!empty($docuCage) && !empty($credNumber)) {
+if(!empty($docuCage)) {
 
-    $data = ORM::for_table('plan_pago_cly')
-        ->select('plan_pago_cly.*')
-        ->join('user', ['plan_pago_cly.user_id','=','user.id'])
-        ->join('history_cred_cly', ['plan_pago_cly.id_credito','=','history_cred_cly.id'])
-        ->where('history_cred_cly.id', $credNumber)
+    $data = ORM::for_table('credit_extract')
+        ->select('credit_extract.*')
+        ->join('user', ['credit_extract.user_id','=','user.id'])
+        ->join('credit_history', ['credit_extract.id_credit','=','credit_history.id'])
+        ->where('credit_history.id', $credNumber)
         ->where('user.id_member', $docuCage)
         ->find_array();
-
+        
     if(!is_null($data) && !empty($data)) {
 
-        $dataDetail = ORM::for_table('detalle_plan_pago_cly')
-        ->where("id_plan_pago_cly", $data[0]["id"])
+        $dataDetail = ORM::for_table('credit_extract_detail')
+        ->where("id_credit_extract", $data[0]["id"])
+        ->order_by_asc('credit_extract_detail.credNroTrans')
         ->find_array();
         
         $dataArray = array(
@@ -35,7 +36,7 @@ if(!empty($docuCage) && !empty($credNumber)) {
 
     } else {
         
-        $data = array("error" => true, "msg" => 'No se logro encontrar el plan de pago');
+        $data = array("error" => true, "msg" => 'No se logro encontrar el extracto de credito');
 
         echo json_encode($data);
     }

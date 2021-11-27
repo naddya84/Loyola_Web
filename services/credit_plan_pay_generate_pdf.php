@@ -1,7 +1,7 @@
 <?php
 require_once '../config/database.php';
 require_once '../config/configure.php';
-require_once '../services/extracto_credito_pdf.php';
+require_once '../services/credit_plan_pay_pdf.php';
 
 //Generate PDF
 $docuCage = $_GET['docu-cage'];
@@ -13,17 +13,17 @@ if(!empty($docuCage) && !empty($credNumber)) {
             ->where("id_member", $docuCage)
             ->find_one();
 
-    $data = ORM::for_table('extracto_credito')
-            ->select('extracto_credito.*')
-            ->join('user', ['extracto_credito.user_id','=','user.id'])
-            ->join('history_cred_cly', ['extracto_credito.id_credito','=','history_cred_cly.id'])
+    $data = ORM::for_table('plan_pago_cly')
+            ->select('plan_pago_cly.*')
+            ->join('user', ['plan_pago_cly.user_id','=','user.id'])
+            ->join('history_cred_cly', ['plan_pago_cly.id_credito','=','history_cred_cly.id'])
             ->where('history_cred_cly.id', $credNumber)
             ->where('user.id_member', $docuCage)
             ->find_one();
 
-    $dataDetail = ORM::for_table('detalle_extracto_credito')
-            ->where("id_extracto_credito", $data["id"])
-            ->order_by_asc("credNroTrans")
+    $dataDetail = ORM::for_table('detalle_plan_pago_cly')
+            ->where("id_plan_pago_cly", $data["id"])
+            ->order_by_asc("credNumCuota")
             ->find_array();
         
     if(
@@ -36,14 +36,14 @@ if(!empty($docuCage) && !empty($credNumber)) {
         $full_name = ($user["last_name_1"].' '.$user["last_name_2"]);
         $pdf = new PDF('P','mm','A4');
         $pdf->AddPage();
-        $pdf->createHeader('../img/logo.png', 'COOPERATIVA DE AHORRA Y CREDITO LOYOLA', 'Extracto de Creditos');
+        $pdf->createHeader('../img/logo.png', 'COOPERATIVA DE AHORRA Y CREDITO LOYOLA', 'Plan de Pagos General');
         $pdf->createHeaderInformation($user["id_member"],$user["names"],$full_name,$user["id_number"], $data);
         $pdf->createHeaderTable();
         $pdf->createTableBody(
             $dataDetail, 
             '../img/logo.png', 
             'COOPERATIVA DE AHORRA Y CREDITO LOYOLA', 
-            'Extracto de Creditos',
+            'Plan de Pagos General',
             $user["id_member"],
             $user["names"],
             $full_name,
