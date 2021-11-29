@@ -5,7 +5,7 @@ require_once('../config/database.php');
 define('FPDF_FONTPATH', "../libs/font");
 
 
-$docuCage = isset($_GET['docu-cage'])?$_GET['docu-cage']:null; //associate code
+$docuCage = isset($_GET['docu_cage'])?$_GET['docu_cage']:null; //associate code
 if ($docuCage == null) {
    die(json_encode([
       'error'=> true,

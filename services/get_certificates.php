@@ -5,7 +5,7 @@ require_once '../config/configure.php';
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 
-$docuCage = isset($_GET['docu-cage'])?$_GET['docu-cage']:null; //associate code
+$docuCage = isset($_GET['docu_cage'])?$_GET['docu_cage']:null; //associate code
 if ($docuCage == null) {
    die(json_encode([
       'error'=> true,
