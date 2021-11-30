@@ -137,13 +137,13 @@ class PDF extends FPDF{
             $this->Cell(25 ,7,$data[$i]["credFecVenci"],1,0,'C');
             $this->Cell(25 ,7,$data[$i]["credMontoCapi"],1,0,'R');
             $this->Cell(25 ,7,$data[$i]["credMontoInte"],1,0,'R');  
-            $this->Cell(25 ,7,$data[$i]["credTotaCuota"],1,0,'R');
-            $this->Cell(25 ,7,$data[$i]["credMontoCargos"],1,0,'R');
+            $this->Cell(25 ,7,$data[$i]["crediTotaCuota"],1,0,'R');
+            $this->Cell(25 ,7,$data[$i]["crediMontoCargos"],1,0,'R');
 
-            $total = $data[$i]["credMontoCapi"] + $data[$i]["credMontoInte"] + $data[$i]["credMontoCargos"];
+            $total = $data[$i]["credMontoCapi"] + $data[$i]["credMontoInte"] + $data[$i]["crediMontoCargos"];
             $this->Cell(25 ,7,$total,1,0,'R');
 
-            $this->Cell(25 ,7,$data[$i]["credSaldoCredi"],1,1,'R');
+            $this->Cell(25 ,7,$data[$i]["crediSaldoCredi"],1,1,'R');
             $count++;
         }
     }

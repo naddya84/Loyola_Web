@@ -1,7 +1,7 @@
 <?php
 require_once '../config/database.php';
 require_once '../config/configure.php';
-require_once '../services/credit_plan_pay_pdf.php';
+require_once '../services/create_credit_plan_pay_pdf.php';
 
 //Generate PDF
 $docuCage = $_GET['docu-cage'];
@@ -13,16 +13,16 @@ if(!empty($docuCage) && !empty($credNumber)) {
             ->where("id_member", $docuCage)
             ->find_one();
 
-    $data = ORM::for_table('plan_pago_cly')
-            ->select('plan_pago_cly.*')
-            ->join('user', ['plan_pago_cly.user_id','=','user.id'])
-            ->join('history_cred_cly', ['plan_pago_cly.id_credito','=','history_cred_cly.id'])
-            ->where('history_cred_cly.id', $credNumber)
+    $data = ORM::for_table('credit_plan_pay')
+            ->select('credit_plan_pay.*')
+            ->join('user', ['credit_plan_pay.user_id','=','user.id'])
+            ->join('credit_history', ['credit_plan_pay.id_credit','=','credit_history.id'])
+            ->where('credit_history.id', $credNumber)
             ->where('user.id_member', $docuCage)
             ->find_one();
 
-    $dataDetail = ORM::for_table('detalle_plan_pago_cly')
-            ->where("id_plan_pago_cly", $data["id"])
+    $dataDetail = ORM::for_table('credit_plan_pay_detail')
+            ->where("id_credit_plan_pay", $data["id"])
             ->order_by_asc("credNumCuota")
             ->find_array();
         
