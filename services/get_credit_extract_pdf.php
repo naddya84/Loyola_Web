@@ -1,7 +1,7 @@
 <?php
 require_once '../config/database.php';
 require_once '../config/configure.php';
-require_once '../services/extracto_credito_pdf.php';
+require_once '../services/create_credit_extract_pdf.php';
 
 //Generate PDF
 $docuCage = $_GET['docu-cage'];
@@ -13,13 +13,16 @@ if(!empty($docuCage) && !empty($credNumber)) {
             ->where("id_member", $docuCage)
             ->find_one();
 
-    $data = ORM::for_table('extracto_credito')
-            ->where("id_credito", $credNumber)
-            ->where("id_member",$docuCage)
+    $data = ORM::for_table('credit_extract')
+            ->select('credit_extract.*')
+            ->join('user', ['credit_extract.user_id','=','user.id'])
+            ->join('credit_history', ['credit_extract.id_credit','=','credit_history.id'])
+            ->where('credit_history.id', $credNumber)
+            ->where('user.id_member', $docuCage)
             ->find_one();
 
-    $dataDetail = ORM::for_table('detalle_extracto_credito')
-            ->where("id_extracto_credito", $data["id"])
+    $dataDetail = ORM::for_table('credit_extract_detail')
+            ->where("id_credit_extract", $data["id"])
             ->order_by_asc("credNroTrans")
             ->find_array();
         

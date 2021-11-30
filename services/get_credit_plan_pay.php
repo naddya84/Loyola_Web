@@ -10,15 +10,19 @@ $credNumber = $_GET['cred-number'];
 
 if(!empty($docuCage) && !empty($credNumber)) {
 
-    $data = ORM::for_table('plan_pago_cly')
-        ->where("id_credito", $credNumber)
-        ->where("id_member", $docuCage)
+    $data = ORM::for_table('credit_plan_pay')
+        ->select('credit_plan_pay.*')
+        ->join('user', ['credit_plan_pay.user_id','=','user.id'])
+        ->join('credit_history', ['credit_plan_pay.id_credit','=','credit_history.id'])
+        ->where('credit_history.id', $credNumber)
+        ->where('user.id_member', $docuCage)
         ->find_array();
-        
+
     if(!is_null($data) && !empty($data)) {
 
-        $dataDetail = ORM::for_table('detalle_plan_pago_cly')
-        ->where("id_plan_pago_cly", $data[0]["id"])
+        $dataDetail = ORM::for_table('credit_plan_pay_detail')
+        ->where("id_credit_plan_pay", $data[0]["id"])
+        ->order_by_asc('credit_plan_pay_detail.credNumCuota')
         ->find_array();
         
         $dataArray = array(
