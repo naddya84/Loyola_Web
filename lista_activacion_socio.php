@@ -93,7 +93,7 @@ $socios = ORM::for_table('user')
             $index = 1 + ($pagina_actual*$items_x_pagina); ?>
             <div class="row bg_cabecera_row hide_row">
               <div class="col-lg-1">Nro</div>
-              <div class="col-lg">Código</div>
+              <div class="col-lg">Nro Socio</div>
               <div class="col-lg">CI</div>
               <div class="col-lg-2">Nombre Socio</div>
               <div class="col-lg">Email</div>
@@ -103,7 +103,7 @@ $socios = ORM::for_table('user')
             <?php foreach($socios as $socio){ ?>
             <div class="row bg_col_row">
               <div class="col-lg-1"><span class="descripcion_col left">Nro.:</span><?=$index ++?></div>
-              <div class="col-lg"><span class="descripcion_col left">Código:</span><?=$socio->verification_code?></div>
+              <div class="col-lg"><span class="descripcion_col left">Código:</span><?=$socio->id_member?></div>
               <div class="col-lg"><span class="descripcion_col left">CI: </span><?=$socio->id_number." ".$socio->id_extension?></div>
               <div class="col-lg-2"><span class="descripcion_col left">Socio:</span><?=$socio->names." ".$socio->last_name_1." ".$socio->last_name_2?></div>
               <div class="col-lg"><span class="descripcion_col left">Email: </span><?=$socio->email?></div>
