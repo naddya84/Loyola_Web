@@ -4,10 +4,10 @@ require_once '../config/configure.php';
 require_once '../services/create_credit_plan_pay_pdf.php';
 
 //Generate PDF
-$docuCage = $_GET['docu-cage'];
-$credNumber = $_GET['cred-number'];
+$docuCage = isset($_GET['docu_cage'])?$_GET['docu_cage']:null; //associate code
+$credNumber = isset($_GET['cred_number'])?$_GET['cred_number']:null; //credit number
 
-if(!empty($docuCage) && !empty($credNumber)) {
+if(!is_null($docuCage) && !is_null($credNumber)) {
 
     $user = ORM::for_table("user")
             ->where("id_member", $docuCage)
